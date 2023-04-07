@@ -3,8 +3,8 @@ SO              ./textures/southwall.xpm
 WE                 ./textures/westwall.xpm
 EA               ./textures/eastwall.xpm
 
-C 135,206,235
-F 128,128,128
+F 128,128,1255555
+C 135,206,255555
 
 
 

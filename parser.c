@@ -6,18 +6,17 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 00:38:04 by adaifi            #+#    #+#             */
-/*   Updated: 2023/04/05 04:34:07 by adaifi           ###   ########.fr       */
+/*   Updated: 2023/04/07 01:46:15 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"cub.h"
-#include "libft/libft.h"
-#include <fcntl.h>
-#include <unistd.h>
 
-bool	check_extension(const char* file, int flag)
+bool	check_extension(const char *file, int flag)
 {
-	int length = ft_strlen(file);
+	int	length;
+
+	length = ft_strlen(file);
 	if (flag == 0)
 	{
 		if (file[length - 1] == 'b')
@@ -29,7 +28,6 @@ bool	check_extension(const char* file, int flag)
 	else if (flag == 1)
 	{
 		length = ft_strlen(file);
-		write(1, &length, 2);
 		if(file[length - 1] == 'm')
 			if(file[length - 2] == 'p')
 				if(file[length - 3] == 'x')
@@ -49,10 +47,13 @@ void	d_free_2d(char **ptr)
 	free(ptr);
 }
 
-int read_file(int fd)
+int	read_file(int fd)
 {
-	int size= 0;
-	char *line = get_next_line(fd);
+	int		size;
+	char	*line;
+
+	size= 0;
+	line = get_next_line(fd);
 	while(line)
 	{
 		free(line);
@@ -60,22 +61,22 @@ int read_file(int fd)
 		size++;
 	}
 	free(line);
-	return size;
+	return (size);
 }
 
-bool check_file(char *file)
+bool	check_file(char *file)
 {
-	 // just for the rendering without texture we assum it true.
 	if (check_extension(file, 1) == true)
-		if (access(file, F_OK | R_OK) == 0)
-			return false;
-	return true;
+		if (access(file, F_OK | R_OK) != 0)
+			return (false);
+	return (true);
 }
 
-void    get_width(t_map *map, int index)
+void	get_width(t_map *map, int index)
 {
-	int i = index;
+	int	i;
 
+	i = index;
 	while (map->map_input[i])
 	{
 		if (ft_strlen(map->map_input[i]) > map->map_width)
@@ -86,10 +87,10 @@ void    get_width(t_map *map, int index)
 
 bool	chroma(t_map *map, char **rgb)
 {
-	char **tab;
-	int nb[3];
-	int i;
-	int j;
+	char	**tab;
+	int		nb[3];
+	int		i;
+	int		j;
 
 	i = -1;
 	tab = ft_split(rgb[1], ',');
@@ -98,64 +99,67 @@ bool	chroma(t_map *map, char **rgb)
 		j = -1;
 		while (tab[i][++j])
 			if (ft_isdigit(tab[i][j]) == 0)
-				return (d_free_2d(tab), ft_putendl_fd("err", 1), false);
+				return (d_free_2d(tab), false);
 		nb[i] = ft_atoi(tab[i]);
-		if(nb[i] < 0 && nb[i] > 255)
+		if (nb[i] < 0 && nb[i] > 255)
 			return (d_free_2d(rgb), false);
 	}
 	if (!ft_strcmp(rgb[0], "F"))
 	{
-		map->F_color->red = nb[0];
-		map->F_color->green = nb[1];
-		map->F_color->blue = nb[2];
+		map->f_color->red = nb[0];
+		map->f_color->green = nb[1];
+		map->f_color->blue = nb[2];
 		return (map->flagofdragon += 1, d_free_2d(rgb), true);
 	}
-	map->C_color->red = nb[0];
-	map->C_color->green = nb[1];
-	map->C_color->blue = nb[2];
+	map->c_color->red = nb[0];
+	map->c_color->green = nb[1];
+	map->c_color->blue = nb[2];
 	return (map->flagofdragon += 1, d_free_2d(rgb), true);
 }
 
 bool	parse_dragons(t_map **map, char* line)
 {
+	char	**tab;
+
 	line = ft_strtrim(line, " \t");
 	if (line[0] == '\n' || line[0] == '\0')
 		return (true);
-	char **tab = ft_split(line, ' ');
-	if (!ft_strcmp(tab[0], "NO") && (*map)->NO == 0 && check_file(tab[1]))
+	tab = ft_split(line, ' ');
+	if (!ft_strcmp(tab[0], "NO") && (*map)->no == 0 && check_file(tab[1]))
 	{
-		(*map)->N_texture = tab[1];
-		(*map)->NO = 1;
+		(*map)->n_texture = tab[1];
+		(*map)->no = 1;
 		(*map)->flagofdragon += 1;
 		return (true);
 	}
-	if (!ft_strcmp(tab[0], "SO") && (*map)->SO == 0 && check_file(tab[1]))
+	if (!ft_strcmp(tab[0], "SO") && (*map)->so == 0 && check_file(tab[1]))
 	{
-		(*map)->S_texture = tab[1];
-		(*map)->SO = 1;
+		(*map)->s_texture = tab[1];
+		(*map)->so = 1;
 		(*map)->flagofdragon += 1;
 		return (true);
 	}
-	if (!ft_strcmp(tab[0], "WE") && (*map)->WE == 0 && check_file(tab[1]))
+	if (!ft_strcmp(tab[0], "WE") && (*map)->we == 0 && check_file(tab[1]))
 	{
-		(*map)->W_texture = tab[1];
-		(*map)->WE = 1;
+		(*map)->w_texture = tab[1];
+		(*map)->we = 1;
 		(*map)->flagofdragon += 1;
 		return (true);
 	}
-	if (!ft_strcmp(tab[0], "EA") && (*map)->EA == 0 && check_file(tab[1]))
+	if (!ft_strcmp(tab[0], "EA") && (*map)->ea == 0 && check_file(tab[1]))
 	{
-		(*map)->E_texture = tab[1];
-		(*map)->EA = 1;
+		(*map)->e_texture = tab[1];
+		(*map)->ea = 1;
 		(*map)->flagofdragon += 1;
-		return ( true);
+		return (true);
 	}
-	if (!ft_strcmp(tab[0], "F") || !ft_strcmp(tab[0], "C"))
-	{
-		if (chroma(*map, tab))
+	if (!ft_strcmp(tab[0], "F"))
+		if (chroma(*map, tab) == true)
 			return (true);
-	}
-	return (write(1, "Error => texture\n", 18),  d_free_2d(tab), false);
+	if (!ft_strcmp(tab[0], "C"))
+		if (chroma(*map, tab) == true)
+			return (true);
+	return (write(1, "Error\n", 7),  d_free_2d(tab), false);
 }
 
 void	line_edit(t_map *map, int index)
@@ -246,20 +250,17 @@ bool	check_orozintios(t_map *map, int index)
 	return true;
 }
 
-bool	check_moji(t_map *map, int index)
+bool	check_moji(t_map *map, int i)
 {
-	int j;
-	int i;
-	int player;
+	int	j;
+	int	player;
 
 	player = 0;
-	i = index;
 	while (i < map->map_length)
 	{
 		j = 0;
 		while (map->map_input[i][j] != '\0')
 		{
-
 			if (map->map_input[i][j] != 'N' && map->map_input[i][j] != ' ' &&
 				map->map_input[i][j] != '1' && map->map_input[i][j] != '0' &&
 				map->map_input[i][j] != 'W' && map->map_input[i][j] != 'E' &&
@@ -315,45 +316,53 @@ bool	parse_chart(t_map *map)
 	return true;
 }
 
-int main(int ac, const char **av)
+void	ft_init(t_map *map, const char *file)
+{
+	map->file = open(file, O_RDONLY);
+	map->map_length = read_file(map->file);
+	map->file = open(file, O_RDONLY);
+	map->map_input = (char **)malloc(sizeof(char *) * (map->map_length + 1));
+	if (!map->map_input)
+		return (close(map->file), free(map), exit(1));
+	map->flagofdragon = 0;
+	map->first = 0;
+	map->map_width = 0;
+	map->no = 0;
+	map->so = 0;
+	map->ea = 0;
+	map->we = 0;
+	map->n_texture = NULL;
+	map->s_texture = NULL;
+	map->w_texture = NULL;
+	map->e_texture = NULL;
+	map->c_color->red = 0;
+	map->c_color->green = 0;
+	map->c_color->blue = 0;
+	map->f_color->red = 0;
+	map->f_color->green = 0;
+	map->f_color->blue = 0;
+}
+
+int	main(int ac, const char **av)
 {
 	t_map *map;
 	int i;
 
 	i = 0;
 	if(ac != 2)
-		exit(1);
-	{
-		map = (t_map *)malloc(sizeof(t_map));
-		map->F_color = (t_color *)malloc(sizeof(t_color));
-		map->C_color = (t_color *)malloc(sizeof(t_color));
-		if (!map)
-			return (printf("Error-mem\n"), 1);
-	}
+		return (printf("Error"), 1);
+	map = (t_map *)malloc(sizeof(t_map));
+	if (!map)
+		return (printf("Error-mem\n"), 1);
+	map->f_color = (t_color *)malloc(sizeof(t_color));
+	map->c_color = (t_color *)malloc(sizeof(t_color));
+	if (!map->f_color)
+		return (printf("Error\n"), free(map), 1);
+	if (!map->c_color)
+		return (printf("Error\n"), free(map), free(map->c_color), 1);
 	if (check_extension(av[1], 0) == false)
 		return(free(map), printf("Error-extension\n"), 1);
-	map->file_name = av[1];
-	map->file = open(map->file_name, O_RDONLY);
-	map->map_length = read_file(map->file);
-	map->file = open(map->file_name, O_RDONLY);
-	map->map_input = (char **)malloc(sizeof(char *) * (map->map_length + 1));
-	map->flagofdragon = 0;
-	map->first = 0;
-	map->map_width = 0;
-	map->NO = 0;
-	map->SO = 0;
-	map->EA = 0;
-	map->WE = 0;
-	map->N_texture = NULL;
-	map->S_texture = NULL;
-	map->W_texture = NULL;
-	map->E_texture = NULL;
-	map->C_color->red = 0;
-	map->C_color->green = 0;
-	map->C_color->blue = 0;
-	map->F_color->red = 0;
-	map->F_color->green = 0;
-	map->F_color->blue = 0;
+	ft_init(map, av[1]);
 	if (map->map_length <= 6)
 		return (ft_putendl_fd("ERROR", 1), 1);
 	while(i < map->map_length)
