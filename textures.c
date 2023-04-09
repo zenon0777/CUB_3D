@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:33:57 by adaifi            #+#    #+#             */
-/*   Updated: 2023/04/07 01:15:16 by adaifi           ###   ########.fr       */
+/*   Updated: 2023/04/09 02:48:47 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,20 @@ void	textures_img(t_data data)
 {
 	data.textures[0].texture_image = mlx_xpm_file_to_image(data.mlx, \
 		"./textures/eastwall.xpm", &data.img_width, &data.img_height);
+	if (!data.textures[0].texture_image)
+		return (free(data.textures), free_map(data.map), exit(1));
 	data.textures[1].texture_image = mlx_xpm_file_to_image(data.mlx, \
 		"./textures/3.xpm", &data.img_width, &data.img_height);
+	if (!data.textures[1].texture_image)
+		return (free(data.textures), free_map(data.map), exit(1));
 	data.textures[2].texture_image = mlx_xpm_file_to_image(data.mlx, \
 		"./textures/northwall.xpm", &data.img_width, &data.img_height);
+	if (!data.textures[2].texture_image)
+		return (free(data.textures), free_map(data.map), exit(1));
 	data.textures[3].texture_image = mlx_xpm_file_to_image(data.mlx, \
 		"./textures/southwall.xpm", &data.img_width, &data.img_height);
+	if (!data.textures[3].texture_image)
+		return (free(data.textures), free_map(data.map), exit(1));
 }
 
 unsigned int	texture_mapping(t_data *data, int hor_ver, double y)
@@ -56,8 +64,8 @@ unsigned int	texture_mapping(t_data *data, int hor_ver, double y)
 	else if (hor_ver == VER)
 		offset = fmod(data->short_dis_y, TILE);
 	y1 = (y - data->begin) * (TILE / data->real_pwh);
-	dst = tex->texture_add + ((int)fmod(y1, 20) * tex->t_ll + \
-		(int)fmod(offset, 20) * (tex->t_bpp / 8));
+	dst = tex->texture_add + ((int)fmod(y1, TILE) * tex->t_ll + \
+		(int)fmod(offset, TILE) * (tex->t_bpp / 8));
 	color = *(unsigned int *)dst;
 	return (color);
 }

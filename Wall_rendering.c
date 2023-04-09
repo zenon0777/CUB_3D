@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:37:20 by adaifi            #+#    #+#             */
-/*   Updated: 2023/04/06 17:10:14 by adaifi           ###   ########.fr       */
+/*   Updated: 2023/04/09 05:03:51 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ void	rendering_wall(t_data *data, int colum, int flag)
 	unsigned int	color;
 
 	data->real_pwh = (TILE / data->short_dis) * data->projection_plane_dis;
-	if (data->real_pwh > data->screen_height)
-		data->pwh = data->screen_height;
+	if (data->real_pwh > data->height)
+		data->pwh = data->height;
 	else
 		data->pwh = data->real_pwh;
 	i = colum;
-	j = (data->screen_height / 2) - (data->pwh / 2);
-	data->begin = (data->screen_height / 2) - (data->real_pwh / 2);
-	while (j < data->pwh + ((data->screen_height / 2) - (data->pwh / 2)))
+	j = (data->height / 2) - (data->pwh / 2);
+	data->begin = (data->height / 2) - (data->real_pwh / 2);
+	while (j < data->pwh + ((data->height / 2) - (data->pwh / 2)))
 	{
 		color = texture_mapping(data, flag, j);
 		d_mlx_put_pixel(data, i, j, color);
@@ -45,6 +45,8 @@ int	calc_dis(t_data *data)
 	ver_dis = sqrt((data->player.p_x - data->gridver_x) * \
 	(data->player.p_x - data->gridver_x) +(data->player.p_y - \
 	data->gridver_y) * (data->player.p_y - data->gridver_y));
+	printf("ver_dis == %f\n", ver_dis);
+	printf("hor_dis == %f\n", hor_dis);
 	if (data->player.p_x == data->gridver_x)
 	{
 		data->short_dis_x = data->gridhor_x;

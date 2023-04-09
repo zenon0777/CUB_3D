@@ -6,7 +6,7 @@
 /*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 16:54:00 by adaifi            #+#    #+#             */
-/*   Updated: 2023/04/07 00:53:06 by adaifi           ###   ########.fr       */
+/*   Updated: 2023/04/09 04:40:42 by adaifi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,12 @@ typedef struct data
 	void		*mlx_img;
 	int			img_width;
 	int			img_height;
-	int			bits_per_pixel;
-	int			line_length;
+	int			bpp;
+	int			ll;
 	int			endian;
 	int			key;
-	int			screen_width;
-	int			screen_height;
+	int			width;
+	int			height;
 	int			flag_dir;
 	double		real_pwh;
 	double		pwh;
@@ -112,40 +112,67 @@ typedef struct data
 	t_textures	*textures;
 }	t_data;
 
-bool			check_textures(t_map *map);
-bool			check_map(t_map *map);
-bool			check_extension(const char *file, int flag);
 void			*ft_memmove(void *dst, const void *src, size_t n);
 char			*get_next_line(int fd);
 char			*ft_strjoin_freed(char const *s1, char const *s2);
 size_t			ft_strlen(const char	*str);
+void			d_free_2d(char **ptr);
+int				dyo_dimen_size(char **tab);
+int				column_calc(char *rgb);
+char			*join_line(char *buff, char *line, int fd);
+///parser
+int				read_file(int fd);
+bool			check_file(char *file);
+void			get_width(t_map *map, int index);
+void			line_edit(t_map *map, int i);
+bool			check_textures(t_map *map);
+bool			check_map(t_map *map);
+bool			chroma(t_map *map, char **rgb);
+bool			chroma_store(t_map *map, int *nb, char *rgb);
+bool			we_ea(t_map *map, char **tab);
+bool			so_no(t_map *map, char **tab);
+bool			check_extension(const char *file, int flag);
 bool			check_moji(t_map *map, int index);
-void			rendering(t_map *map);
-void			draw(t_map *map, t_data *data);
-void			draw_line_dir(t_data *data, t_player *player);
+bool			check_orozintios(t_map *map, int index);
+bool			orizontios_itter(t_map *map, int i, int j);
+bool			check_sichocu(t_map *map, int index);
+bool			sichocu_itter(t_map *map, int i, int j);
+bool			parse_dragons(t_map **map, char *line);
+bool			parse_chart_lower(t_map *map, int index);
+bool			parse_chart(t_map *map);
+void			chart_store(t_map *map);
+void			free_map(t_map *map);
+void			open_file(t_map *map, const char *file);
+/// rendering
 void			cast_ray(t_data *data);
-double			normalize_angle(double deg);
-void			draw_view(t_data *data, t_player *player, double deg);
 int				calc_dis(t_data *data);
-int				short_dis(t_data *data, double hor_dis, double ver_dis);
 void			d_mlx_put_pixel(t_data *data, int x, int y, int color);
+void			draw_line_dir(t_data *data, t_player *player);
+void			draw(t_map *map, t_data *data, int i);
+void			draw_view(t_data *data, t_player *player, double deg);
+double			normalize_angle(double deg);
+void			rendering(t_map *map);
+int				short_dis(t_data *data, double hor_dis, double ver_dis);
 void			rendering_wall(t_data *data, int colum, int flag);
-void			draw(t_map *map, t_data *data);
 void			floor_draw(t_data *data, int y, int mid_point);
 void			celling_draw(t_data *data);
+bool			check_hor_hit(t_data *data, int i, int j, double f_ray);
+bool			check_ver_hit(t_data *data, int i, int j, double deg);
 void			calc_nexthor_grid(t_data *data, double f_ray);
 void			calc_nextver_grid(t_data *data, double f_ray);
 void			sichoucu_hit(t_data *data, double deg);
 void			orizontios_hit(t_data *data, double f_ray);
 void			textures(t_textures *textures, double deg, int Hor_ver);
 void			draw_player(t_data *data);
-int				isplayer(t_data *data, char p, int flag);
+int				isplayer(t_data *data, char p);
 void			cast_ray(t_data *data);
 void			player_angle(t_data *data, t_map *map);
 void			wall_coloision(t_data *data, double x1, double y1);
 unsigned int	texture_mapping(t_data *data, int hor_ver, double y);
 void			textures_img(t_data data);
+/// hook
 int				key_release(int key, t_data *data);
 int				key(int key, t_data *data);
 void			clear_redraw(t_map *map, t_data *data);
+void			destroy_img(t_data *data);
 #endif

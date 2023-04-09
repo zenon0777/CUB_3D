@@ -1,0 +1,10 @@
+a.out
+cub3d
+**.o
+**.a
+**.json
+**.a
+minilibx_macos/libmlx.a
+.DS_Store
+.dccache
+cub3d.dSYM/Contents/Info.plist

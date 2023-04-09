@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   player.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adaifi <adaifi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/07 20:57:49 by adaifi            #+#    #+#             */
+/*   Updated: 2023/04/09 04:47:58 by adaifi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub.h"
 
 void	player_angle(t_data *data, t_map *map)
@@ -11,7 +23,7 @@ void	player_angle(t_data *data, t_map *map)
 		j = 0;
 		while (j < (int)map->map_width)
 		{
-			if (isplayer(data, map->map_input[i][j], 1) == true)
+			if (isplayer(data, map->map_input[i][j]) == 0)
 				return ;
 			j++;
 		}
@@ -19,10 +31,8 @@ void	player_angle(t_data *data, t_map *map)
 	}
 }
 
-int	isplayer(t_data *data, char p, int flag)
+int	isplayer(t_data *data, char p)
 {
-	if (flag == 0 && (p == 'N' || p == 'S' || p == 'w' || p == 'S'))
-		return (1);
 	if (p == 'N')
 	{
 		data->player.rotation_angle = (3 * M_PI) / 2;
@@ -45,4 +55,3 @@ int	isplayer(t_data *data, char p, int flag)
 	}
 	return (-1);
 }
-
